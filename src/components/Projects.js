@@ -1,8 +1,17 @@
 import React, { useMemo, useState } from "react";
-
-// Drop this file into your src/ folder (e.g., src/Projects.jsx)
-// Then route to it (e.g., in App.jsx) <Projects />
-// TailwindCSS recommended but not required; uses utility classes if available.
+import {
+  Container,
+  Box,
+  Typography,
+  Chip,
+  Button,
+  Card,
+  CardContent,
+  Grid,
+  Stack,
+  Divider,
+} from "@mui/material";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 const PROJECTS = [
   {
@@ -18,8 +27,8 @@ const PROJECTS = [
       "결제 지연일·계약기간·최근 이용 간격이 주요 요인",
     ],
     links: [
-      { label: "GitHub Repo", href: "https://github.com/USERNAME/dacon-customer-support" },
-      { label: "Submission.csv", href: "https://github.com/USERNAME/dacon-customer-support/releases" },
+      { label: "GitHub Repo", href: "https://github.com/doyeon-del/dacon-customer-support" },
+      { label: "Submission.csv", href: "https://github.com/doyeon-del/dacon-customer-support/releases" },
       { label: "데이콘 대회 페이지", href: "https://dacon.io" },
     ],
   },
@@ -33,7 +42,7 @@ const PROJECTS = [
       "28일 입력 → 7일 예측. 시차·요일·프로모션 피처링과 캘린더리스 효과 반영.",
     highlights: ["SMAPE 상위권", "피처 중요도 해석·대시보드"],
     links: [
-      { label: "GitHub Repo", href: "https://github.com/USERNAME/lg-aimers-forecast" },
+      { label: "GitHub Repo", href: "https://github.com/doyeon-del/lg-aimers-forecast" },
     ],
   },
   {
@@ -46,64 +55,72 @@ const PROJECTS = [
       "거래·고객 특성 기반 부도 위험 분류, 파생변수 설계 및 검증.",
     highlights: ["ROC-AUC ↑", "리스크 요인 해석"],
     links: [
-      { label: "GitHub Repo", href: "https://github.com/USERNAME/finance_credit_risk_analytics" },
+      { label: "GitHub Repo", href: "https://github.com/Udoyeon-del/finance_credit_risk_analytics" },
     ],
   },
 ];
 
 const TAGS = ["All", ...Array.from(new Set(PROJECTS.flatMap(p => p.tags)))];
 
-function Badge({ children }) {
-  return (
-    <span className="inline-flex items-center rounded-full border px-2 py-0.5 text-xs leading-5 mr-1 mb-1">
-      {children}
-    </span>
-  );
-}
-
-function LinkButton({ href, children }) {
-  return (
-    <a
-      href={href}
-      target="_blank"
-      rel="noreferrer"
-      className="inline-flex items-center justify-center rounded-2xl border px-3 py-1 text-sm hover:shadow-md transition"
-    >
-      {children}
-    </a>
-  );
-}
-
 function ProjectCard({ p }) {
   return (
-    <div className="rounded-2xl border p-5 hover:shadow-lg transition h-full flex flex-col">
-      <div className="flex items-start justify-between">
-        <h3 className="text-lg font-semibold">{p.title}</h3>
-        <span className="text-xs opacity-70">{p.period}</span>
-      </div>
-      <p className="mt-1 text-sm opacity-80">{p.subtitle}</p>
-      <div className="mt-3 flex flex-wrap">
-        {p.tags.map(t => (
-          <Badge key={t}>{t}</Badge>
-        ))}
-      </div>
-      <p className="mt-3 text-sm">{p.description}</p>
-      {p.highlights?.length > 0 && (
-        <ul className="mt-3 list-disc list-inside text-sm space-y-1">
-          {p.highlights.map((h, i) => (
-            <li key={i}>{h}</li>
+      <Card
+      sx={{
+      height: "100%",
+      ":hover": { transform: "translateY(-2px)", boxShadow: 6 },
+      }}
+      >
+      <CardContent>
+        <Box display="flex" justifyContent="space-between" alignItems="flex-start">
+          <Typography variant="h6" fontWeight={700}>
+            {p.title}
+          </Typography>
+          <Typography variant="caption" color="text.secondary">
+            {p.period}
+          </Typography>
+        </Box>
+
+        <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+          {p.subtitle}
+        </Typography>
+
+        <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ mt: 1.5 }}>
+          {p.tags.map(t => (
+            <Chip key={t} label={t} size="small" variant="outlined" />
           ))}
-        </ul>
-      )}
-      <div className="mt-4 flex gap-2 flex-wrap">
-        {p.links?.map(l => (
-          <LinkButton key={l.href} href={l.href}>
-            {l.label}
-          </LinkButton>
-        ))}
-      </div>
-      <div className="mt-auto" />
-    </div>
+        </Stack>
+
+        <Typography variant="body2" sx={{ mt: 1.5 }}>
+          {p.description}
+        </Typography>
+
+        {p.highlights?.length > 0 && (
+          <Box component="ul" sx={{ mt: 1.5, pl: 2, mb: 0 }}>
+            {p.highlights.map((h, i) => (
+              <Typography component="li" key={i} variant="body2">
+                {h}
+              </Typography>
+            ))}
+          </Box>
+        )}
+
+        <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ mt: 2 }}>
+          {p.links?.map(l => (
+            <Button
+              key={l.href}
+              href={l.href}
+              target="_blank"
+              rel="noreferrer"
+              size="small"
+              variant="outlined"
+              endIcon={<OpenInNewIcon fontSize="small" />}
+            >
+              {l.label}
+            </Button>
+          ))}
+        </Stack>
+      </CardContent>
+    </Card>
   );
 }
 
@@ -115,46 +132,65 @@ export default function Projects() {
   }, [active]);
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-10">
-      <header className="mb-6">
-        <h1 className="text-2xl font-bold">Projects</h1>
-        <p className="opacity-80 mt-1 text-sm">
-          데이터 기반 문제정의 → 모델링/분석 → 해석/결과물까지의 완결형 프로젝트 모음.
-        </p>
-      </header>
+    <Box component="section" id="projects" sx={{ py: { xs: 4, md: 6 } }}>
+      <Container maxWidth="lg">
+        <Box mb={2}>
+          <Typography variant="h4" fontWeight={800}>
+            Projects
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+            데이터 기반 문제정의 → 모델링/분석 → 해석/결과물까지의 완결형 프로젝트 모음.
+          </Typography>
+        </Box>
 
-      {/* Filters */}
-      <div className="flex flex-wrap gap-2 mb-6">
-        {TAGS.map(tag => (
-          <button
-            key={tag}
-            onClick={() => setActive(tag)}
-            className={`rounded-2xl border px-3 py-1 text-sm hover:shadow-sm transition ${
-              active === tag ? "bg-black text-white" : ""
-            }`}
-          >
-            {tag}
-          </button>
-        ))}
-      </div>
+        {/* Filters */}
+        <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ mb: 3 }}>
+          {TAGS.map(tag => {
+            const selected = active === tag;
+            return (
+              <Button
+                key={tag}
+                size="small"
+                variant={selected ? "contained" : "outlined"}
+                onClick={() => setActive(tag)}
+                sx={{ textTransform: "none", borderRadius: 999 }}
+              >
+                {tag}
+              </Button>
+            );
+          })}
+        </Stack>
 
-      {/* Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filtered.map(p => (
-          <ProjectCard key={p.id} p={p} />)
-        )}
-      </div>
+        <Grid container spacing={2.5}>
+          {filtered.map(p => (
+            <Grid item xs={12} sm={6} lg={4} key={p.id}>
+              <ProjectCard p={p} />
+            </Grid>
+          ))}
+        </Grid>
 
-      {/* How to use note */}
-      <section className="mt-10 rounded-xl border p-4 text-sm">
-        <h2 className="font-semibold mb-1">How to maintain</h2>
-        <ol className="list-decimal list-inside space-y-1 opacity-90">
-          <li>USERNAME을 본인 GitHub 아이디로 바꾸세요.</li>
-          <li>새 프로젝트를 추가할 때는 PROJECTS 배열에 객체를 하나 더 추가하세요.</li>
-          <li>필요하면 태그를 추가하면 자동으로 필터 버튼이 생깁니다.</li>
-          <li>라우팅: App.jsx에서 <code>{`<Projects />`}</code>를 연결하세요.</li>
-        </ol>
-      </section>
-    </div>
+        <Divider sx={{ my: 4 }} />
+
+        <Box>
+          <Typography variant="subtitle1" fontWeight={700} gutterBottom>
+            How to maintain
+          </Typography>
+          <Box component="ol" sx={{ pl: 2, m: 0 }}>
+            <Typography component="li" variant="body2" color="text.secondary">
+             ????????
+            </Typography>
+            <Typography component="li" variant="body2" color="text.secondary">
+              새 프로젝트를 추가할 때는 PROJECTS 배열에 객체를 하나 더 추가하세요.
+            </Typography>
+            <Typography component="li" variant="body2" color="text.secondary">
+              태그를 추가하면 필터 버튼이 자동으로 생깁니다.
+            </Typography>
+            <Typography component="li" variant="body2" color="text.secondary">
+              App.js에서 {"<Projects />"}로 연결되어 있으면 그대로 동작합니다.
+            </Typography>
+          </Box>
+        </Box>
+      </Container>
+    </Box>
   );
 }
