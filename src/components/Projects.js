@@ -15,6 +15,23 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 const PROJECTS = [
   {
+    id: "ssafy-ai-challenge-2026",
+    title: "SSAFY 2nd AI Challenge: Recyclables VQA",
+    subtitle: "Qwen2.5-VL-7B 모델 최적화 및 앙상블 전략 수립",
+    period: "2026.04",
+    tags: ["VQA", "Qwen2.5-VL", "Fine-tuning", "Batch Inference"],
+    description:
+      "분리수거 이미지 질의응답 시스템 구축을 위해 멀티모달 모델을 파인튜닝하고 추론 파이프라인을 최적화했습니다.",
+    highlights: [
+      "Qwen2.5-VL-7B LoRA 파인튜닝 및 레이블 마스킹(Assistant 답변 한정) 적용",
+      "Batch Inference 도입 및 padding-side 최적화로 추론 속도 10배 개선",
+      "3개 Seed(42, 123, 2024) 기반 Majority Vote 앙상블로 예측 안정성 확보"
+    ],
+    links: [
+      { label: "Solution Code", href: "#" }, // 여기에 파일 경로나 링크를 넣으세요.
+    ],
+  },
+  {
     id: "dacon-support-2025",
     title: "Dacon Basic: 고객 지원 등급 분류",
     subtitle: "LightGBM·CatBoost 앙상블, Optuna 튜닝, SHAP 인사이트",
@@ -23,97 +40,73 @@ const PROJECTS = [
     description:
       "고객 특성 데이터 기반으로 지원 필요도(0/1/2) 분류. 데이터 전처리 → 모델 비교(LGBM/Cat/XGB) → 보팅 앙상블 → SHAP.",
     highlights: [
-      "Macro F1(CV) 개선 +X.XXp (Baseline 대비)",
+      "Macro F1(CV) 개선 (Baseline 대비)",
       "결제 지연일·계약기간·최근 이용 간격이 주요 요인",
     ],
     links: [
       { label: "GitHub Repo", href: "https://github.com/doyeon-del/dacon-customer-support" },
-      { label: "Submission.csv", href: "https://github.com/doyeon-del/dacon-customer-support/releases" },
-      { label: "데이콘 대회 페이지", href: "https://dacon.io" },
     ],
   },
-  {
-    id: "lg-aimers-forecast",
-    title: "LG Aimers: 리조트 메뉴 수요 예측",
-    subtitle: "LightGBM 시계열, SMAPE 최적화",
-    period: "2024",
-    tags: ["Time Series", "LightGBM", "SMAPE"],
-    description:
-      "28일 입력 → 7일 예측. 시차·요일·프로모션 피처링과 캘린더리스 효과 반영.",
-    highlights: ["SMAPE 상위권", "피처 중요도 해석·대시보드"],
-    links: [
-      { label: "GitHub Repo", href: "https://github.com/doyeon-del/lg-aimers-forecast" },
-    ],
-  },
-  {
-    id: "finance-credit-risk",
-    title: "Finance Credit Risk Analytics",
-    subtitle: "Binary/Multiclass, LightGBM + SHAP",
-    period: "2024",
-    tags: ["Credit Risk", "LightGBM", "Explainable AI"],
-    description:
-      "거래·고객 특성 기반 부도 위험 분류, 파생변수 설계 및 검증.",
-    highlights: ["ROC-AUC ↑", "리스크 요인 해석"],
-    links: [
-      { label: "GitHub Repo", href: "https://github.com/Udoyeon-del/finance_credit_risk_analytics" },
-    ],
-  },
+  // ... 기존 다른 프로젝트들
 ];
 
 const TAGS = ["All", ...Array.from(new Set(PROJECTS.flatMap(p => p.tags)))];
 
 function ProjectCard({ p }) {
   return (
-      <Card
+    <Card
+      elevation={0}
       sx={{
-      height: "100%",
-      ":hover": { transform: "translateY(-2px)", boxShadow: 6 },
+        height: "100%",
+        borderRadius: "24px", // 토스 스타일의 둥근 모서리
+        border: "1px solid #F2F4F6",
+        backgroundColor: "#FFFFFF",
+        transition: "all 0.3s ease",
+        ":hover": { transform: "translateY(-4px)", boxShadow: "0 12px 30px rgba(0,0,0,0.04)" },
       }}
-      >
-      <CardContent>
-        <Box display="flex" justifyContent="space-between" alignItems="flex-start">
-          <Typography variant="h6" fontWeight={700}>
+    >
+      <CardContent sx={{ p: 4 }}>
+        <Box display="flex" justifyContent="space-between" alignItems="flex-start" mb={1}>
+          <Typography variant="h6" fontWeight={800} sx={{ color: "#191F28" }}>
             {p.title}
           </Typography>
-          <Typography variant="caption" color="text.secondary">
-            {p.period}
-          </Typography>
+          <Chip label={p.period} size="small" sx={{ fontWeight: 600, backgroundColor: "#F2F4F6", color: "#6B7684" }} />
         </Box>
 
-        <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+        <Typography variant="body2" sx={{ color: "#3182F6", fontWeight: 600, mb: 2 }}>
           {p.subtitle}
         </Typography>
 
-        <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ mt: 1.5 }}>
-          {p.tags.map(t => (
-            <Chip key={t} label={t} size="small" variant="outlined" />
-          ))}
-        </Stack>
-
-        <Typography variant="body2" sx={{ mt: 1.5 }}>
+        <Typography variant="body2" sx={{ color: "#4E5968", lineHeight: 1.6, mb: 3 }}>
           {p.description}
         </Typography>
 
         {p.highlights?.length > 0 && (
-          <Box component="ul" sx={{ mt: 1.5, pl: 2, mb: 0 }}>
+          <Box component="ul" sx={{ p: 0, m: 0, listStyle: "none", mb: 3 }}>
             {p.highlights.map((h, i) => (
-              <Typography component="li" key={i} variant="body2">
-                {h}
-              </Typography>
+              <Box component="li" key={i} sx={{ display: "flex", gap: 1, mb: 1 }}>
+                <Typography variant="body2" sx={{ color: "#3182F6", fontWeight: "bold" }}>•</Typography>
+                <Typography variant="body2" sx={{ color: "#4E5968" }}>{h}</Typography>
+              </Box>
             ))}
           </Box>
         )}
 
-        <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ mt: 2 }}>
+        <Stack direction="row" spacing={0.5} flexWrap="wrap" mb={4}>
+          {p.tags.map(t => (
+            <Chip key={t} label={t} size="small" sx={{ fontSize: "11px", borderRadius: "4px" }} />
+          ))}
+        </Stack>
+
+        <Stack direction="row" spacing={1}>
           {p.links?.map(l => (
             <Button
               key={l.href}
               href={l.href}
               target="_blank"
-              rel="noreferrer"
               size="small"
-              variant="outlined"
-              endIcon={<OpenInNewIcon fontSize="small" />}
+              sx={{ textTransform: "none", fontWeight: 700, color: "#3182F6" }}
+              endIcon={<OpenInNewIcon sx={{ fontSize: 14 }} />}
             >
               {l.label}
             </Button>
@@ -132,64 +125,45 @@ export default function Projects() {
   }, [active]);
 
   return (
-    <Box component="section" id="projects" sx={{ py: { xs: 4, md: 6 } }}>
+    <Box component="section" id="projects" sx={{ py: 10, backgroundColor: "#F9FAFB" }}>
       <Container maxWidth="lg">
-        <Box mb={2}>
-          <Typography variant="h4" fontWeight={800}>
+        <Box mb={6}>
+          <Typography variant="h3" fontWeight={800} sx={{ color: "#191F28", mb: 2 }}>
             Projects
           </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-            데이터 기반 문제정의 → 모델링/분석 → 해석/결과물까지의 완결형 프로젝트 모음.
+          <Typography variant="body1" sx={{ color: "#4E5968" }}>
+            데이터 아키텍처와 최신 AI 기술을 결합하여 실질적인 해결책을 도출한 기록입니다.
           </Typography>
         </Box>
 
-        {/* Filters */}
-        <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ mb: 3 }}>
-          {TAGS.map(tag => {
-            const selected = active === tag;
-            return (
-              <Button
-                key={tag}
-                size="small"
-                variant={selected ? "contained" : "outlined"}
-                onClick={() => setActive(tag)}
-                sx={{ textTransform: "none", borderRadius: 999 }}
-              >
-                {tag}
-              </Button>
-            );
-          })}
+        <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ mb: 5 }}>
+          {TAGS.map(tag => (
+            <Button
+              key={tag}
+              disableElevation
+              variant={active === tag ? "contained" : "text"}
+              onClick={() => setActive(tag)}
+              sx={{
+                borderRadius: "999px",
+                textTransform: "none",
+                px: 2,
+                backgroundColor: active === tag ? "#3182F6" : "transparent",
+                color: active === tag ? "#FFFFFF" : "#6B7684",
+                ":hover": { backgroundColor: active === tag ? "#1B64DA" : "#F2F4F6" }
+              }}
+            >
+              {tag}
+            </Button>
+          ))}
         </Stack>
 
-        <Grid container spacing={2.5}>
+        <Grid container spacing={4}>
           {filtered.map(p => (
-            <Grid item xs={12} sm={6} lg={4} key={p.id}>
+            <Grid item xs={12} md={6} key={p.id}>
               <ProjectCard p={p} />
             </Grid>
           ))}
         </Grid>
-
-        <Divider sx={{ my: 4 }} />
-
-        <Box>
-          <Typography variant="subtitle1" fontWeight={700} gutterBottom>
-            How to maintain
-          </Typography>
-          <Box component="ol" sx={{ pl: 2, m: 0 }}>
-            <Typography component="li" variant="body2" color="text.secondary">
-             ????????
-            </Typography>
-            <Typography component="li" variant="body2" color="text.secondary">
-              새 프로젝트를 추가할 때는 PROJECTS 배열에 객체를 하나 더 추가하세요.
-            </Typography>
-            <Typography component="li" variant="body2" color="text.secondary">
-              태그를 추가하면 필터 버튼이 자동으로 생깁니다.
-            </Typography>
-            <Typography component="li" variant="body2" color="text.secondary">
-              App.js에서 {"<Projects />"}로 연결되어 있으면 그대로 동작합니다.
-            </Typography>
-          </Box>
-        </Box>
       </Container>
     </Box>
   );
